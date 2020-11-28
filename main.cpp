@@ -65,7 +65,17 @@ Node** openFile(Node *array[]){
 }
 
 Node** getManualNums(Node *array[]){
+  char input[1000];
+  cout << "Enter in up to 100 numbers with values between 1 and 1000." << endl;
+  cout << "Separate the numbers by spaces. " << endl;
+  cin.get(input, 1000);
+  cin.get();
 
-
+  //parsing method from stack overflow
+  char *token = strtok(input, " ");
+  while(token != NULL){
+    cout << atoi(token) << endl;
+    token = strtok(NULL, " ");
+  }
   return array;
 }
