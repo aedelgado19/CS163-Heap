@@ -6,18 +6,20 @@
 #include <iostream>
 #include <cstring>
 #include <fstream>
+
 using namespace std;
 #define SIZE 100
 
-//function prototypes
-Node** openFile(Node* array[]);
-Node** getManualNums(Node* array[]);
 
 struct Node {
   int value;
   Node *previous;
   Node *next;
 };
+
+//function prototypes
+Node** openFile(Node* array[]);
+Node** getManualNums(Node* array[]);
 
 
 int main(){
@@ -30,13 +32,15 @@ int main(){
     cout << "Would you like to input numbers through: " << endl;
     cout << "(1) a file" << endl;
     cout << "(2) the console" << endl;
-    cout << "> " << endl;
+    cout << "> ";
     cin >> input;
     cin.get();
     if(input == 1){ //numbers are in a file
+      validInput = true;
       array = openFile(array);
     }
     else if(input == 2){ //manually input numbers
+      validInput = true;
       array = getManualNums(array);
     }
     else { //neither 
@@ -66,6 +70,8 @@ Node** openFile(Node *array[]){
 
 Node** getManualNums(Node *array[]){
   char input[1000];
+  Node* numPtr = NULL;
+  int num = 0;
   cout << "Enter in up to 100 numbers with values between 1 and 1000." << endl;
   cout << "Separate the numbers by spaces. " << endl;
   cin.get(input, 1000);
@@ -74,8 +80,18 @@ Node** getManualNums(Node *array[]){
   //parsing method from stack overflow
   char *token = strtok(input, " ");
   while(token != NULL){
-    cout << atoi(token) << endl;
-    token = strtok(NULL, " ");
+    num = atoi(token);
+    cout << "num: " << num << endl;
+    token = strtok(NULL, " ");    
+    for(int i = 0; i < strlen(input); i++){
+      numPtr = array[i];
+      numPtr->value = num;
+      cout << "added" << endl;
+    }
+  }
+  cout << "print array: " << endl;
+  for(int j = 0; j < SIZE; j++){
+    cout << array[j] << endl;
   }
   return array;
 }
