@@ -37,6 +37,11 @@ int main(){
     if(input == 1){ //numbers are in a file
       validInput = true;
       openFile(inputArray);
+      
+      cout << "back in main" << endl;
+      for(int i = 0; i < SIZE; i++){
+	cout << inputArray[i] << " ";
+      }
     }
     else if(input == 2){ //manually input numbers
       validInput = true;
@@ -50,8 +55,11 @@ int main(){
   return 0;
 }
 
+//gets numbers from a file
 void openFile(int inputArray[SIZE]){
   ifstream inFile;
+  int num = 0;
+  int count = 0;
   char fileName[30];
   cout << "Enter the file name: " << endl;
   cout << "Remember: numbers must be separated by spaces. " << endl;
@@ -63,9 +71,13 @@ void openFile(int inputArray[SIZE]){
     cout << "Unable to open file. " << endl;
     exit(1);
   }
-  //havent done yet: read in all numbers and put into array
+  while(inFile >> num){
+    inputArray[count] = num; //add into input array
+    count++;
+  }
 }
 
+//gets manually entered numbers from user
 void getManualNums(int inputArray[SIZE]){
   char input[1000];
   Node* numPtr = new Node;
@@ -85,7 +97,7 @@ void getManualNums(int inputArray[SIZE]){
     amountOfNums++; //used for debug print
     counter++; //iterate in order to add into array
   }
-  /*
+  /* debug:
   cout << "print array: " << endl;
   for(int j = 0; j < amountOfNums; j++){
     cout << inputArray[j] << endl;
