@@ -19,40 +19,16 @@ struct Node {
 //function prototypes
 void openFile(int inputArray[SIZE]);
 void getManualNums(int inputArray[SIZE]);
+Node* insert(int inputArray[SIZE]);
+void printTree(); //prints visual tree
+void printOutput(); //prints greatest to smallest
+void heapify(); //recursively swaps nodes to order in heap 
+void removeNode(); //removes from tree, adds to output
+
+//creates nodes for each slot of input array
+Node* insert(int inputArray[SIZE]){
 
 
-int main(){
-  int input = 0;
-  int inputArray[SIZE];
-  bool validInput = false;
-  cout << "*************************" << endl;
-  cout << "Welcome to Heap!" << endl;
-  while(validInput == false){
-    cout << "Would you like to input numbers through: " << endl;
-    cout << "(1) a file" << endl;
-    cout << "(2) the console" << endl;
-    cout << "> ";
-    cin >> input;
-    cin.get();
-    if(input == 1){ //numbers are in a file
-      validInput = true;
-      openFile(inputArray);
-      
-      cout << "back in main" << endl;
-      for(int i = 0; i < SIZE; i++){
-	cout << inputArray[i] << " ";
-      }
-    }
-    else if(input == 2){ //manually input numbers
-      validInput = true;
-      getManualNums(inputArray);
-    }
-    else { //neither 
-      cout << "That was not a valid input." << endl;
-      validInput = false;
-    }
-  }
-  return 0;
 }
 
 //gets numbers from a file
@@ -103,4 +79,36 @@ void getManualNums(int inputArray[SIZE]){
     cout << inputArray[j] << endl;
   }
   */
+}
+
+int main(){
+  int input = 0;
+  int inputArray[SIZE];
+  Node* tree;
+  bool validInput = false;
+  cout << "*************************" << endl;
+  cout << "Welcome to Heap!" << endl;
+  while(validInput == false){
+    cout << "Would you like to input numbers through: " << endl;
+    cout << "(1) a file" << endl;
+    cout << "(2) the console" << endl;
+    cout << "> ";
+    cin >> input;
+    cin.get();
+    if(input == 1){ //numbers are in a file
+      validInput = true;
+      openFile(inputArray);
+      tree = insert(inputArray);
+    }
+    else if(input == 2){ //manually input numbers
+      validInput = true;
+      getManualNums(inputArray);
+      tree = insert(inputArray);
+    }
+    else { //neither 
+      cout << "That was not a valid input." << endl;
+      validInput = false;
+    }
+  }
+  return 0;
 }
