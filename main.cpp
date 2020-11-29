@@ -77,20 +77,18 @@ void getManualNums(int inputArray[SIZE]){
   cin.get(input, 1000);
   cin.get();
 
-  //parsing method from stack overflow
   char *token = strtok(input, " ");
   while(token != NULL){
     num = atoi(token);
-    cout << "num: " << num << endl;
     token = strtok(NULL, " ");    
-
     inputArray[counter] = num;
-    amountOfNums++;
-    cout << "added" << endl;
-    counter++;
+    amountOfNums++; //used for debug print
+    counter++; //iterate in order to add into array
   }
+  /*
   cout << "print array: " << endl;
   for(int j = 0; j < amountOfNums; j++){
     cout << inputArray[j] << endl;
   }
+  */
 }
