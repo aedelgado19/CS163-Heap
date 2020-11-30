@@ -14,11 +14,27 @@ using namespace std;
 int openFile(int inputArray[SIZE]);
 int getManualNums(int inputArray[SIZE]);
 void insert(int inputArray[SIZE], int arraysize, int outputArray[]);
-void printTree(); //prints visual tree
-void printOutput(); //prints greatest to smallest
+void printOutput(int outputArray[], int arraysize); //prints array form of heap 
 void heapify(int outputArray[], int searchnum, int childIndex); 
 int findParent(int outputArray[], int childIndex);
-void removeNode(); //removes from tree, adds to output
+void remove(int outputArray[], int arraysize); //removes from array, adds to output and visually prints
+
+
+void printOutput(int outputArray[], int arraysize){
+  int row = 0;
+  cout << "Array form of heap: ";
+  for(int i = 1; i < arraysize+1; i++){
+    cout << i << " ";
+  }
+}
+
+//visually prints array after removing from heap
+void remove(int outputArray[], int arraysize){
+  
+  for(int i = 1; i < arraysize+1; i++){
+    
+  }
+}
 
 //creates nodes for each slot of input array
 void insert(int inputArray[SIZE], int arraysize, int outputArray[]){
@@ -28,13 +44,6 @@ void insert(int inputArray[SIZE], int arraysize, int outputArray[]){
     outputArray[i] = inputArray[j];
     j++;
     heapify(outputArray, outputArray[i], i);
-
-    //debug:
-    cout << "printing out current array: ";
-    for(int j = 1; j < arraysize+1; j++){
-      cout << " " << endl;
-      cout << outputArray[j] << " ";
-    }
   }
   
   cout << "out of for loop: " << endl;
@@ -51,9 +60,6 @@ void heapify(int outputArray[], int searchnum, int childIndex){
   parentIndex = findParent(outputArray, childIndex);
   parentNum = outputArray[parentIndex];
   while(searchnum > parentNum){
-    cout << "swapping numbers because " << searchnum << " > " << parentNum << endl;
-    cout << "before swap: parent num = " << parentNum << " at slot " << parentIndex << endl;
-    cout << "and child num = " << searchnum << " at slot " << childIndex << endl;
     //swap numbers
     temp = parentNum;
     parentNum = searchnum;
@@ -65,8 +71,6 @@ void heapify(int outputArray[], int searchnum, int childIndex){
     parentIndex = temp;
 
     //update array
-    cout << "after swap new 'parent' num: " << parentNum << " at slot: " << parentIndex << endl;
-    cout << "after swap new 'child' num: " << searchnum << " at slot: " << childIndex << endl;
     outputArray[parentIndex] = searchnum;
     outputArray[childIndex] = parentNum;
 
@@ -152,11 +156,15 @@ int main(){
       validInput = true;
       arraysize = openFile(inputArray);
       insert(inputArray, arraysize, outputArray);
+      printOutput(outputArray, arraysize);
+      remove(outputArray);
     }
     else if(input == 2){ //manually input numbers
       validInput = true;
       arraysize = getManualNums(inputArray);
       insert(inputArray, arraysize, outputArray);
+      printOutput(outputArray, arraysize);
+      remove(outputArray);
     }
     else { //neither 
       cout << "That was not a valid input." << endl;
@@ -165,3 +173,4 @@ int main(){
   }
   return 0;
 }
+B
