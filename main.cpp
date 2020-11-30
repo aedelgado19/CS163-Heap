@@ -13,11 +13,11 @@ using namespace std;
 //function prototypes
 int openFile(int inputArray[SIZE]);
 int getManualNums(int inputArray[SIZE]);
-void insert(int inputArray[SIZE], int arraysize, int &outputArray[]);
+void insert(int inputArray[SIZE], int arraysize, int outputArray[]);
 void printTree(); //prints visual tree
 void printOutput(); //prints greatest to smallest
-void heapify(int arraysize, int &outputArray[], int searchnum, int childIndex); 
-int findParent(int arraysize, int &outputArray[], int childIndex);
+void heapify(int outputArray[], int searchnum, int childIndex); 
+int findParent(int outputArray[], int childIndex);
 void removeNode(); //removes from tree, adds to output
 
 //creates nodes for each slot of input array
@@ -26,7 +26,7 @@ void insert(int inputArray[SIZE], int arraysize, int outputArray[]){
   for(int i = 1; i < arraysize+1; i++){ //start at i = 1
     outputArray[i] = inputArray[j];
     j++;
-    heapify(arraysize, outputArray, outputArray[i], i);
+    heapify(outputArray, outputArray[i], i);
   }
   
   cout << "out of for loop: " << endl;
@@ -36,13 +36,16 @@ void insert(int inputArray[SIZE], int arraysize, int outputArray[]){
 
 }
 
-void heapify(int arraysize, int &outputArray[], int searchnum, int childIndex){
+void heapify(int outputArray[], int searchnum, int childIndex){
   int parentIndex = 0;
   int parentNum = 0;
   int temp = 0;
-  parentIndex = findParent(arraysize, outputArray, childIndex);
+  parentIndex = findParent(outputArray, childIndex);
   parentNum = outputArray[parentIndex];
   while(searchnum > parentNum){
+    cout << "swapping numbers because " << searchnum << " > " << parentNum << endl;
+    cout << "before swap: parent num = " << parentNum << " at slot " << parentIndex << endl;
+    cout << "and child num = " << searchnum << " at slot " << childIndex << endl;
     //swap numbers
     temp = parentNum;
     parentNum = searchnum;
@@ -53,13 +56,18 @@ void heapify(int arraysize, int &outputArray[], int searchnum, int childIndex){
     childIndex = parentIndex;
     parentIndex = temp;
 
+    //update array
+    cout << "after swap new 'parent' num: " << parentNum << " at slot: " << parentIndex << endl;
+    cout << "after swap new 'child' num: " << searchnum << " at slot: " << childIndex << endl;
+    outputArray[parentIndex] = searchnum;
+    outputArray[childIndex] = parentNum;
     //recall functions
-    parentIndex = findParent(arraysize, outputArray, parentIndex);
+    parentIndex = findParent(outputArray, parentIndex);
     searchnum = outputArray[parentIndex];  
   }
 }
 
-int findParent(int arraysize, int &outputArray[], int childIndex){
+int findParent(int outputArray[], int childIndex){
   int parentIndex = 0;
   parentIndex = childIndex/2;
   if(parentIndex == 0){
