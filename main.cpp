@@ -34,28 +34,44 @@ void heapify(int arraysize, int outputArray[arraysize], int searchnum, int child
   int parentIndex = 0;
   int parentNum = 0;
   int temp = 0;
-  
   parentIndex = findParent(arraysize, outputArray, childIndex);
+  cout << "a- parent index is: " << parentIndex << endl;
   parentNum = outputArray[parentIndex];
+  cout << "b- parent num is: " << parentNum << endl;
   while(searchnum > parentNum){
+    cout << "swapping numbers because " << searchnum << " > " << parentNum << endl;
+    cout << "before swap: parent num = " << parentNum << " at slot " << parentIndex << endl;
+    cout << "and child num = " << searchnum << " at slot " << childIndex << endl;
     //swap numbers
     temp = parentNum;
     parentNum = searchnum;
     searchnum = temp;
+    
     //swap indexes
     temp = childIndex;
     childIndex = parentIndex;
     parentIndex = temp;
 
+    cout << "after swap new 'parent' num: " << parentNum << " at slot: " << parentIndex << endl;
+    cout << "after swap new 'child' num: " << searchnum << " at slot: " << childIndex << endl;
+
     //recall functions
     parentIndex = findParent(arraysize, outputArray, parentIndex);
     searchnum = outputArray[parentIndex];
+    cout << "recalled functions. new parent index is " << parentIndex << endl;
+    cout << "new searchnum (child) is " << searchnum << endl; 
   }
+  cout << "out of while loop" << endl;
 }
 
 int findParent(int arraysize, int outputArray[arraysize], int childIndex){
   int parentIndex = 0;
+  cout << "inside findParent(). child index is " << childIndex << endl;
   parentIndex = childIndex/2;
+  if(parentIndex == 0){
+    parentIndex = 1; //special case
+    cout << "parent index was 0, has been changed to 1" << endl;
+  }
   return parentIndex;
 }
 
