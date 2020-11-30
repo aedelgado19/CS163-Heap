@@ -22,11 +22,19 @@ void removeNode(); //removes from tree, adds to output
 
 //creates nodes for each slot of input array
 void insert(int inputArray[SIZE], int arraysize, int outputArray[]){
+
   int j = 0; //keeps track of input array
   for(int i = 1; i < arraysize+1; i++){ //start at i = 1
     outputArray[i] = inputArray[j];
     j++;
     heapify(outputArray, outputArray[i], i);
+
+    //debug:
+    cout << "printing out current array: ";
+    for(int j = 1; j < arraysize+1; j++){
+      cout << " " << endl;
+      cout << outputArray[j] << " ";
+    }
   }
   
   cout << "out of for loop: " << endl;
@@ -61,9 +69,12 @@ void heapify(int outputArray[], int searchnum, int childIndex){
     cout << "after swap new 'child' num: " << searchnum << " at slot: " << childIndex << endl;
     outputArray[parentIndex] = searchnum;
     outputArray[childIndex] = parentNum;
-    //recall functions
-    parentIndex = findParent(outputArray, parentIndex);
-    searchnum = outputArray[parentIndex];  
+
+    //recall functions to prepare for next loop iteration
+    childIndex = findParent(outputArray, parentIndex); //make what used to be parent, child
+    searchnum = outputArray[childIndex];
+    parentIndex = findParent(outputArray, childIndex);
+    parentNum = outputArray[parentIndex];
   }
 }
 
