@@ -1,5 +1,5 @@
 /* Author: Allison Delgado
- * Last Updated: November 28, 2020
+ * Last Updated: November 29, 2020
  * This program creates a heap to store up to 100 numbers
  * and displays them visually
  */
@@ -14,43 +14,50 @@ using namespace std;
 int openFile(int inputArray[SIZE]);
 int getManualNums(int inputArray[SIZE]);
 void insert(int inputArray[SIZE], int arraysize, int outputArray[]);
-void printOutput(int outputArray[], int arraysize); //prints array form of heap 
 void heapify(int outputArray[], int searchnum, int childIndex); 
 int findParent(int outputArray[], int childIndex);
 void remove(int outputArray[], int arraysize); //removes from array, adds to output and visually prints
+void visualPrint(int outputArray[], int index, int depth);
 
 
-void printOutput(int outputArray[], int arraysize){
-  int row = 0;
-  cout << "Array form of heap: ";
-  for(int i = 1; i < arraysize+1; i++){
-    cout << i << " ";
+//visually prints a horizontal tree recursively
+void visualPrint(int outputArray[], int index, int depth){
+  if(outputArray[index] <= 0 || index > 101){
+    return;
   }
+  //top child
+  visualPrint(outputArray, index*2+1, depth+1);
+
+  //spacing
+  for(int i = 0; i < depth; i++){
+    cout << "   ";
+  }
+  cout << outputArray[index] << endl;
+
+  //bottom child
+  visualPrint(outputArray, index*2, depth+1);
+
 }
 
-//visually prints array after removing from heap
-void remove(int outputArray[], int arraysize){
-  
+// removing numbers from heap, cout as array output
+void remove(int outputArray[], int arraysize){  
+  cout << "Array form of heap: " << endl;
   for(int i = 1; i < arraysize+1; i++){
-    
+    if(outputArray[i] != 0){
+      cout << outputArray[i] << " ";
+    }
+    outputArray[i] = 0;
   }
 }
 
 //creates nodes for each slot of input array
 void insert(int inputArray[SIZE], int arraysize, int outputArray[]){
-
   int j = 0; //keeps track of input array
   for(int i = 1; i < arraysize+1; i++){ //start at i = 1
     outputArray[i] = inputArray[j];
     j++;
     heapify(outputArray, outputArray[i], i);
   }
-  
-  cout << "out of for loop: " << endl;
-  for(int j = 1; j < arraysize+1; j++){
-    cout << outputArray[j] << " ";
-  }
-
 }
 
 void heapify(int outputArray[], int searchnum, int childIndex){
@@ -119,12 +126,12 @@ int getManualNums(int inputArray[SIZE]){
   char input[1000];
   int num = 0;
   int amountOfNums = 0;
+  bool isInRange = true;
   int counter = 0;
   cout << "Enter in up to 100 numbers with values between 1 and 1000." << endl;
   cout << "Separate the numbers by spaces. " << endl;
   cin.get(input, 1000);
   cin.get();
-
   char *token = strtok(input, " ");
   while(token != NULL){
     num = atoi(token);
@@ -140,7 +147,7 @@ int main(){
   int arraysize = 0;
   int input = 0;
   int inputArray[SIZE];
-  int outputArray[arraysize];
+  int outputArray[101] = { };
   bool validInput = false;
   cout << "*************************" << endl;
   cout << "Welcome to Heap!" << endl;
@@ -156,15 +163,16 @@ int main(){
       validInput = true;
       arraysize = openFile(inputArray);
       insert(inputArray, arraysize, outputArray);
-      printOutput(outputArray, arraysize);
-      remove(outputArray);
+      visualPrint(inputArray, 1, 0);
+      remove(outputArray, arraysize);
+      
     }
     else if(input == 2){ //manually input numbers
       validInput = true;
       arraysize = getManualNums(inputArray);
       insert(inputArray, arraysize, outputArray);
-      printOutput(outputArray, arraysize);
-      remove(outputArray);
+      visualPrint(inputArray, 1, 0);
+      remove(outputArray, arraysize);
     }
     else { //neither 
       cout << "That was not a valid input." << endl;
@@ -173,4 +181,3 @@ int main(){
   }
   return 0;
 }
-B
