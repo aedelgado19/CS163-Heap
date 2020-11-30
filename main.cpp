@@ -18,14 +18,24 @@ void heapify(int outputArray[], int searchnum, int childIndex);
 int findParent(int outputArray[], int childIndex);
 void remove(int outputArray[], int arraysize); //removes from array, adds to output and visually prints
 void visualPrint(int outputArray[], int index, int depth);
+bool checkRange(int num);
 
 
 //visually prints a horizontal tree recursively
+/*
+algorithm inspired by 
+https://www.geeksforgeeks.org/print-binary-tree-2-dimensions/
+but changed to fit this case (does not use nodes and 
+instead works with array). this prints the tree horizontally, 
+with the top child first,then adding spacing, then the bottom child.
+top = right and bottom = left.
+*/
 void visualPrint(int outputArray[], int index, int depth){
   if(outputArray[index] <= 0 || index > 101){
     return;
   }
-  //top child
+
+  //top child (right)
   visualPrint(outputArray, index*2+1, depth+1);
 
   //spacing
@@ -34,7 +44,7 @@ void visualPrint(int outputArray[], int index, int depth){
   }
   cout << outputArray[index] << endl;
 
-  //bottom child
+  //bottom child (left)
   visualPrint(outputArray, index*2, depth+1);
 
 }
@@ -46,7 +56,7 @@ void remove(int outputArray[], int arraysize){
     if(outputArray[i] != 0){
       cout << outputArray[i] << " ";
     }
-    outputArray[i] = 0;
+    outputArray[i] = 0; //remove
   }
 }
 
@@ -60,6 +70,7 @@ void insert(int inputArray[SIZE], int arraysize, int outputArray[]){
   }
 }
 
+//sorts out the array into a max heap by swapping nums until child < parent
 void heapify(int outputArray[], int searchnum, int childIndex){
   int parentIndex = 0;
   int parentNum = 0;
@@ -83,17 +94,20 @@ void heapify(int outputArray[], int searchnum, int childIndex){
 
     //recall functions to prepare for next loop iteration
     childIndex = findParent(outputArray, parentIndex); //make what used to be parent, child
+
+    //update parameters
     searchnum = outputArray[childIndex];
     parentIndex = findParent(outputArray, childIndex);
     parentNum = outputArray[parentIndex];
   }
 }
 
+//finds the parent of a child index by dividing index by 2
 int findParent(int outputArray[], int childIndex){
   int parentIndex = 0;
   parentIndex = childIndex/2;
   if(parentIndex == 0){
-    parentIndex = 1; //special case
+    parentIndex = 1; //special case, return 1
   }
   return parentIndex;
 }
@@ -112,6 +126,7 @@ int openFile(int inputArray[SIZE]){
   
   if(!inFile){ //error out if cannot open
     cout << "Unable to open file. " << endl;
+    cout << "Terminating program. Please re run and try again. " << endl; 
     exit(1);
   }
   while(inFile >> num){
@@ -133,22 +148,43 @@ int getManualNums(int inputArray[SIZE]){
   cin.get(input, 1000);
   cin.get();
   char *token = strtok(input, " ");
+
+  //while in range, turn input into numbers
   while(token != NULL){
     num = atoi(token);
-    token = strtok(NULL, " ");    
-    inputArray[counter] = num;
-    amountOfNums++;
-    counter++; //iterate in order to add into array
+    isInRange = checkRange(num);
+    if(isInRange == true){
+      token = strtok(NULL, " ");    
+      inputArray[counter] = num;
+      amountOfNums++;
+      counter++; //iterate in order to add into array
+
+    } else { //not valid
+      cout << "That was not a number within the range of 1 - 1000" << endl;
+      cout << "Terminating program. Please re run and try again. " << endl; 
+      exit(0);
+    }
   }
   return amountOfNums;
+}
+
+//checks that inputted numbers are between 1 and 1000
+bool checkRange(int num){
+  if(num >= 1 && num <= 1000){
+    return true;
+  } else {
+    return false;
+  }
 }
 
 int main(){
   int arraysize = 0;
   int input = 0;
   int inputArray[SIZE];
-  int outputArray[101] = { };
+  int outputArray[101] = {0};
   bool validInput = false;
+
+  //welcome messages
   cout << "*************************" << endl;
   cout << "Welcome to Heap!" << endl;
   while(validInput == false){
@@ -158,12 +194,15 @@ int main(){
     cout << "(2) the console" << endl;
     cout << "> ";
     cin >> input;
-    cin.get();
+    cin.clear();
+    cin.ignore(1000, '\n');
+
     if(input == 1){ //numbers are in a file
       validInput = true;
       arraysize = openFile(inputArray);
       insert(inputArray, arraysize, outputArray);
-      visualPrint(inputArray, 1, 0);
+      cout << endl;
+      visualPrint(outputArray, 1, 0);
       remove(outputArray, arraysize);
       
     }
@@ -171,11 +210,14 @@ int main(){
       validInput = true;
       arraysize = getManualNums(inputArray);
       insert(inputArray, arraysize, outputArray);
-      visualPrint(inputArray, 1, 0);
+      cout << endl;
+      visualPrint(outputArray, 1, 0);
       remove(outputArray, arraysize);
     }
     else { //neither 
       cout << "That was not a valid input." << endl;
+      cout << endl;
+      cout << "*************************" << endl;
       validInput = false;
     }
   }
